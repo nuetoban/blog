@@ -1,0 +1,14 @@
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: blackstalin-blog
+spec:
+  rules:
+    - host: {{.Values.domain}}
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: blackstalin-blog
+              servicePort: 8090

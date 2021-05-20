@@ -1,0 +1,8 @@
+name: blackstalin-blog
+apiVersion: v2
+description: blackstalin-blog
+version: 0.1.0
+keywords:
+  - blackstalin-blog
+sources:
+home:

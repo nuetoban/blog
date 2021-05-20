@@ -1,0 +1,54 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: blackstalin-blog
+  name: blackstalin-blog
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      name: blackstalin-blog
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: blackstalin-blog
+        name: blackstalin-blog
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+        - image: "{{.Values.image}}:{{.Values.tag}}"
+          name: blackstalin-blog
+          ports:
+          - containerPort: 8090
+          resources:
+            requests:
+              memory: "25Mi"
+              cpu: "25m"
+            limits:
+              memory: "50Mi"
+              cpu: "100m"
+          imagePullPolicy: IfNotPresent
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sleep", "5"]
+          livenessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - curl -s http://localhost:8090/
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 10
+status: {}
